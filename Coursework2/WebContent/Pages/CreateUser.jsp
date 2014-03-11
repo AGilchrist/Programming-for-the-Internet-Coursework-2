@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>
+<title>Create a User</title>
 </head>
 <body>
 <h1>Please enter a username and password</h1>
-<form name="Login" method="post" action="LogIn.jsp">
+<form name="CreateUser" method="post" action="CreateUser.jsp">
 Username:
 <input type="text" name="myUsername" id="myUsername" value="">
 <br/>
@@ -17,19 +17,18 @@ Password:
 <input type="password" name="myPassword" id="myPassword" value="">
 <br/>
 <br/>
-<input type="Submit" value="Log In">
+<input type="Submit" value="Create Account">
 </form>
 
 <%
 String myUsername = request.getParameter("myUsername");
 String myPassword = request.getParameter("myPassword");
-Log.LogIn(myUsername, myPassword);
-if(Log.isLoggedIn())
-	response.sendRedirect("http://localhost:8080/Coursework2/RenderTweets.jsp");
-else
-{}
-
 %>
+
+<br>
+<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
+<br><br>
+<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/>
 
 <script type="text/javascript">
  function openPage(pageURL)

@@ -6,15 +6,13 @@
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
-<jsp:setProperty name="Log" property="*" /> 
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Tweets</title>
 </head>
 <body>
 
 <%
-if(Log.isLoggedIn()){
-    out.println("Here are the Tweets<br />");
+out.println("Here are the Tweets<br />");
     
 System.out.println("In render");
 List<TweetStore> lTweet = (List<TweetStore>)request.getAttribute("Tweets");
@@ -23,10 +21,6 @@ if (lTweet==null){
 <p>No Tweet found</p>
 <%
 }else{
-%>
-
-
-<%
 Iterator<TweetStore> iterator;
 
 
@@ -36,17 +30,12 @@ TweetStore ts = (TweetStore)iterator.next();
 
 %>
 <a href="/ac32007examples/Tweet/<%=ts.getUser() %>" ><%=ts.getTweet() %></a><br/><%
-
 }
 }
 %>
-<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/LogOut.jsp')"/><%}
-
-else{
-	out.println("Please Log in to access features <br />");%>
-	<br>
-    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/LogIn.jsp')"/><%}
-%>
+<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
+<br><br>
+<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/>
 
 <script type="text/javascript">
  function openPage(pageURL)
