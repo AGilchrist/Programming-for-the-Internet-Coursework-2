@@ -5,13 +5,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
+<jsp:setProperty name="Log" property="*" /> 
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Tweets</title>
 </head>
 <body>
 
-<h1>Tweet</h1>
 <%
+if(Log.isLoggedIn()){
+    out.println("Here are the Tweets<br />");
+    
 System.out.println("In render");
 List<TweetStore> lTweet = (List<TweetStore>)request.getAttribute("Tweets");
 if (lTweet==null){
@@ -36,6 +40,20 @@ TweetStore ts = (TweetStore)iterator.next();
 }
 }
 %>
+<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/LogOut.jsp')"/><%}
+
+else{
+	out.println("Please Log in to access features <br />");%>
+	<br>
+    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/LogIn.jsp')"/><%}
+%>
+
+<script type="text/javascript">
+ function openPage(pageURL)
+ {
+ window.location.href = pageURL;
+ }
+ </script>
 
 </body>
 </html>
