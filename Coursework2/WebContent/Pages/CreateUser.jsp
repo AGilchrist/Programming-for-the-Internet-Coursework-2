@@ -21,15 +21,17 @@ Password:
 </form>
 
 <%
-String myUsername = request.getParameter("myUsername");
-String myPassword = request.getParameter("myPassword");
+String user = request.getParameter("myUsername");
+String password = request.getParameter("myPassword");
+if(request.getParameter("myUsername") != null){
+	out.println(request.getParameter("myUsername"));
+	if(request.getParameter("myPassword") != null){
+		out.println(request.getParameter("myPassword"));
+Log.CreateAccount(request.getParameter("myUsername"), request.getParameter("myPassword"));
+response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	}
+}
 %>
-
-<br>
-<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
-<br><br>
-<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/>
-
 <script type="text/javascript">
  function openPage(pageURL)
  {

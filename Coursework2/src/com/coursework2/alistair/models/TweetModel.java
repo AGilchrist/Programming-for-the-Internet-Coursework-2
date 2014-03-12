@@ -25,6 +25,7 @@ import com.datastax.driver.core.Session;
 
 import com.coursework2.alistair.lib.*;
 import com.coursework2.alistair.stores.TweetStore;
+
 public class TweetModel {
 Cluster cluster;
 public TweetModel(){
