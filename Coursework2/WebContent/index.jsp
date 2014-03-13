@@ -12,7 +12,7 @@
 <body>
 <%
 if(Log.isLoggedIn()){
-    out.println("Hello please select the action you want to carry out <br />");%>
+    out.println("Hello please select the action you want to carry out <br><br>");%>
 <form action="#">
 <select name="URL" onchange="window.location.href= this.form.URL.options[this.form.URL.selectedIndex].value">
 <option>      </option>
@@ -27,7 +27,11 @@ else{
 	<br>
     <input type="button" value="Sign Up" name="SignUp" onclick="openPage('http://localhost:8080/Coursework2/Pages/CreateUser.jsp')"/>
     <br><br>
-    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogIn.jsp')"/><% } %>
+    <%
+    boolean keyspace = Log.DoesKeyspaceExist();
+    if (keyspace == true){
+    %>
+    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogIn.jsp')"/><% } }%>
 
 <script type="text/javascript">
  function openPage(pageURL)

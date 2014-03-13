@@ -10,7 +10,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 public class UserLogIn {
-    boolean loggedIn = false;
+    boolean loggedIn = false, keyspaceexists = false;
     Cluster cluster;
    
     public UserLogIn()
@@ -58,6 +58,12 @@ public class UserLogIn {
 	            + "= {'class':'SimpleStrategy', 'replication_factor':1};");
 	   session.execute("CREATE TABLE IF NOT EXISTS UserDetails.Users (id uuid, name text, password text, PRIMARY KEY (id, name));");
 	   session.close();
+	   keyspaceexists = true;
+   }
+   
+   public boolean DoesKeyspaceExist()
+   {
+	   return keyspaceexists;
    }
    
    public void LogOut()
