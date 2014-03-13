@@ -50,6 +50,16 @@ public class UserLogIn {
 	   return;
    }
    
+   public void CreateUserTable()
+   {
+	   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+	   Session session = cluster.connect();
+	   session.execute("CREATE KEYSPACE IF NOT EXISTS UserDetails WITH replication "
+	            + "= {'class':'SimpleStrategy', 'replication_factor':1};");
+	   session.execute("CREATE TABLE IF NOT EXISTS UserDetails.Users (id uuid, name text, password text, PRIMARY KEY (id, name));");
+	   session.close();
+   }
+   
    public void LogOut()
    {
 	   if(loggedIn == true)
