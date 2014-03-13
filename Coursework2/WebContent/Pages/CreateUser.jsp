@@ -24,9 +24,7 @@ Password:
 String user = request.getParameter("myUsername");
 String password = request.getParameter("myPassword");
 if(request.getParameter("myUsername") != null){
-	out.println(request.getParameter("myUsername"));
 	if(request.getParameter("myPassword") != null){
-		out.println(request.getParameter("myPassword"));
 Log.CreateAccount(request.getParameter("myUsername"), request.getParameter("myPassword"));
 response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
 	}

@@ -23,7 +23,16 @@ Password:
 <%
 String myUsername = request.getParameter("myUsername");
 String myPassword = request.getParameter("myPassword");
-Log.LogIn(myUsername, myPassword);
+if(request.getParameter("myUsername") != null){
+	if(request.getParameter("myPassword") != null){
+		Log.LogIn(myUsername, myPassword);
+		if(!Log.isLoggedIn()){
+			%>
+			<H3>Please enter a valid username and/or password</H3>
+			<%
+		}
+	}
+}
 if(Log.isLoggedIn())
 	response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
 else
