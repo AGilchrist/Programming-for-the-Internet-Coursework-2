@@ -21,7 +21,6 @@ Password:
 </form>
 
 <%
-Log.CreateUserTable();
 String user = request.getParameter("myUsername");
 String password = request.getParameter("myPassword");
 if(request.getParameter("myUsername") != null){

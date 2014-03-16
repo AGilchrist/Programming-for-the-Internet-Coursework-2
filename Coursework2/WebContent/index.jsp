@@ -23,15 +23,12 @@ if(Log.isLoggedIn()){
 <input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/><%}
 
 else{
-	out.println("Please log in or create an account<br />");%>
+	out.println("Please log in or create an account<br />");
+	Object DatabaseExists = request.getAttribute("Database");%>
 	<br>
     <input type="button" value="Sign Up" name="SignUp" onclick="openPage('http://localhost:8080/Coursework2/Pages/CreateUser.jsp')"/>
     <br><br>
-    <%
-    boolean keyspace = Log.DoesKeyspaceExist();
-    if (keyspace == true){
-    %>
-    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogIn.jsp')"/><% } }%>
+    <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogIn.jsp')"/><%}%>
 
 <script type="text/javascript">
  function openPage(pageURL)

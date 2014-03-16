@@ -10,8 +10,10 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 public class UserLogIn {
-    boolean loggedIn = false, keyspaceexists = false;
-    Cluster cluster;
+    boolean loggedIn = false;
+    UUID UserID;
+    String username;
+    Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
    
     public UserLogIn()
     {
@@ -25,47 +27,31 @@ public class UserLogIn {
   
    public void CreateAccount(String User, String Password)
    {
-	   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 	   Session session = cluster.connect("UserDetails");
 	   UUID PrimaryKey = UUID.randomUUID();
-	   PreparedStatement statement = session.prepare("INSERT INTO UserDetails.Users (id, name, password) VALUES(?, ?, ?)");
+	   PreparedStatement statement = session.prepare("INSERT INTO UserDetails.Users (id, Name, Password) VALUES(?, ?, ?)");
 	   session.execute(statement.bind(PrimaryKey, User, Password));
 	   session.close();
    }
   
    public void LogIn(String Username, String Password)
    {
-	   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 	   Session session = cluster.connect("UserDetails");
-	   PreparedStatement statement = session.prepare("SELECT name, password FROM UserDetails.Users");
+	   PreparedStatement statement = session.prepare("SELECT * FROM UserDetails.Users");
 	   BoundStatement boundStatement = new BoundStatement(statement);
 	   ResultSet rs = session.execute(boundStatement);
 	   session.close();
 	   for (Row row : rs) {
-		   if(Username.equals(row.getString("name"))){
-					   if(Password.equals(row.getString("password")))
+		   if(Username.equals(row.getString("Name"))){
+					   if(Password.equals(row.getString("Password")))
 						   loggedIn = true;
+					   		UserID = row.getUUID("id");
+					   		username = Username;
 				   }
 	   }
 	   return;
    }
-   
-   public void CreateUserTable()
-   {
-	   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-	   Session session = cluster.connect();
-	   session.execute("CREATE KEYSPACE IF NOT EXISTS UserDetails WITH replication "
-	            + "= {'class':'SimpleStrategy', 'replication_factor':1};");
-	   session.execute("CREATE TABLE IF NOT EXISTS UserDetails.Users (id uuid, name text, password text, PRIMARY KEY (id, name));");
-	   session.close();
-	   keyspaceexists = true;
-   }
-   
-   public boolean DoesKeyspaceExist()
-   {
-	   return keyspaceexists;
-   }
-   
+
    public void LogOut()
    {
 	   if(loggedIn == true)
