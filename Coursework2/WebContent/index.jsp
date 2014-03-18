@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
-<jsp:setProperty name="Log" property="*" /> 
+<jsp:setProperty name="Log" property="*" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Home Page</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
@@ -15,17 +15,18 @@ if(Log.isLoggedIn()){
     out.println("Hello please select the action you want to carry out <br><br>");%>
 <form action="#">
 <select name="URL" onchange="window.location.href= this.form.URL.options[this.form.URL.selectedIndex].value">
-<option>      </option>
-<option value="http://localhost:8080/Coursework2/Pages/RenderTweets.jsp">See all Tweets</option>
+<option> </option>
+<option value="http://localhost:8080/Coursework2/Pages/TrackSearch.jsp">Search Spotify for songs</option>
+<option value="http://localhost:8080/Coursework2/Pages/ArtistSearch.jsp">Search Spotify for artists</option>
+<option value="http://localhost:8080/Coursework2/Pages/AlbumSearch.jsp">Search Spotify for albums</option>
 </select>
 <br><br>
 </form>
 <input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/><%}
 
 else{
-	out.println("Please log in or create an account<br />");
-	Object DatabaseExists = request.getAttribute("Database");%>
-	<br>
+out.println("Please log in or create an account<br />");%>
+<br>
     <input type="button" value="Sign Up" name="SignUp" onclick="openPage('http://localhost:8080/Coursework2/Pages/CreateUser.jsp')"/>
     <br><br>
     <input type="button" value="Log In" name="Login" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogIn.jsp')"/><%}%>
@@ -38,7 +39,7 @@ else{
  
  function createdatabase(pageURL)
  {
-	 window.location.href = pageURL;
+window.location.href = pageURL;
  }
  </script>
 
