@@ -1,7 +1,11 @@
 package com.coursework2.alistair.Beans;
 
+import com.datastax.driver.core.utils.UUIDs;
+
 public class Data {
 	String searchTrack, searchArtist, searchAlbum;
+	String playlistName, trackID;
+	int PlaylistPos;
 	
 	public Data(){
 		
@@ -35,6 +39,36 @@ public class Data {
 	public String getAlbum()
 	{
 		return searchAlbum;
+	}
+	
+	public void setPlaylistName(String Playlist)
+	{
+		playlistName = Playlist;
+	}
+	
+	public String getPlaylistName()
+	{
+		return playlistName;
+	}
+	
+	public void setTrackID(String ID)
+	{
+		trackID = ID;
+	}
+	
+	public String getTrackID()
+	{
+		return trackID;
+	}
+	
+	public void setPlaylistPos(int i)
+	{
+		PlaylistPos = i;
+	}
+	
+	public int getPlaylistPos()
+	{
+		return PlaylistPos;
 	}
 	
 	public void reset()

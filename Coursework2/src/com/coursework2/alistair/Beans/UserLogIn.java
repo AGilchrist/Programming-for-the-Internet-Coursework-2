@@ -1,6 +1,6 @@
 package com.coursework2.alistair.Beans;
 
-import java.util.UUID;
+import java.io.PrintWriter;
 
 import com.coursework2.alistair.models.Playlists;
 import com.datastax.driver.core.BoundStatement;
@@ -12,10 +12,12 @@ import com.datastax.driver.core.Session;
 
 public class UserLogIn {
     boolean loggedIn = false;
-    UUID UserID;
     String username;
+    PreparedStatement statement;
     Playlists db = new Playlists();
     Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+    PrintWriter out;
+    boolean nameexists;
    
     public UserLogIn()
     {
@@ -27,13 +29,22 @@ public class UserLogIn {
        return loggedIn;
    }
   
-   public void CreateAccount(String User, String Password)
+   public void CreateAccount(String Username, String Password)
    {
 	   db.CreateDatabase();
 	   Session session = cluster.connect("UserDetails");
-	   UUID PrimaryKey = UUID.randomUUID();
-	   PreparedStatement statement = session.prepare("INSERT INTO UserDetails.Users (id, Name, Password) VALUES(?, ?, ?)");
-	   session.execute(statement.bind(PrimaryKey, User, Password));
+	   statement = session.prepare("SELECT * FROM UserDetails.Users");
+	   BoundStatement boundStatement = new BoundStatement(statement);
+	   ResultSet rs = session.execute(boundStatement);
+	   for (Row row : rs) {
+			if(Username.equals(row.getString("UserName"))){
+				nameexists = true;
+	   		}
+	   }
+	   if(nameexists != true){
+		   statement = session.prepare("INSERT INTO UserDetails.Users (UserName, Password) VALUES(?, ?)");
+		   session.execute(statement.bind(Username, Password));
+	   }
 	   session.close();
    }
   
@@ -45,27 +56,39 @@ public class UserLogIn {
 		ResultSet rs = session.execute(boundStatement);
 		session.close();
 		for (Row row : rs) {
-		if(Username.equals(row.getString("Name"))){
-		if(Password.equals(row.getString("Password")))
-		loggedIn = true;
-		UserID = row.getUUID("id");
-		username = Username;
-}
-}
-return;
+			if(Username.equals(row.getString("UserName"))){
+				if(Password.equals(row.getString("Password"))){
+					loggedIn = true;
+					username = Username;
+				}
+			}
+		}
+		return;
    }
 
    public void LogOut()
    {
-		if(loggedIn == true)
-		loggedIn = false;
+		if(loggedIn == true){
+			loggedIn = false;
+			username = null;
+		}
 		else
 		return;
    }
-
-public String getUsername()
-{
-	return username;
-}
+   
+	public String getUsername()
+	{
+		return username;
+	}
+	
+	public void setNameExists(boolean state)
+	{
+		nameexists = state;
+	}
+	
+	public boolean getNameExists()
+	{
+		return nameexists;
+	}
 
 }

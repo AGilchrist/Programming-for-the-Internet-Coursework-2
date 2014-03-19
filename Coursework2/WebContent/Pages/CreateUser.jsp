@@ -25,8 +25,14 @@ String user = request.getParameter("myUsername");
 String password = request.getParameter("myPassword");
 if(request.getParameter("myUsername") != null){
 	if(request.getParameter("myPassword") != null){
-Log.CreateAccount(request.getParameter("myUsername"), request.getParameter("myPassword"));
-response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+		Log.CreateAccount(request.getParameter("myUsername"), request.getParameter("myPassword"));
+		if(Log.getNameExists() == false){
+		response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+		}
+		else {
+			out.println("<br> Unfortunately that username has already been taken");
+			Log.setNameExists(false);
+		}
 	}
 }
 %>

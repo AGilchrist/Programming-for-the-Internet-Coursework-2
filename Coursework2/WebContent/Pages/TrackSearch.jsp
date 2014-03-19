@@ -19,7 +19,7 @@ if(Log.isLoggedIn()){
 Song Title to search for:
 <input type="text" name="myTrack" id="myTrack" value="">
 <br><br>
-<input type="Submit" value="Update details for Servlet">
+<input type="button" value="Search!" name="Search!" onclick="openPage('http://localhost:8080/Coursework2/SpotifySearch/Track/')"/> 
 <br><br>
 </form>
 <%  
@@ -45,6 +45,6 @@ else{
  {
  window.location.href = pageURL;
  }
-</script>
+ </script>
 </body>
 </html>

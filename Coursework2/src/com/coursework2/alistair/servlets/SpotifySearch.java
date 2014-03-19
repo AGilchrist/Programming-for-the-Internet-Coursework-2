@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import com.google.code.jspot.Spotify;
 import com.coursework2.alistair.Beans.Data;
@@ -32,7 +31,6 @@ initParams = {
 public class SpotifySearch extends HttpServlet {
 private static final long serialVersionUID = 1L;
 private HashMap CommandsMap = new HashMap();
-private DataSource _ds = null;
 
 /**
 * @see HttpServlet#HttpServlet()

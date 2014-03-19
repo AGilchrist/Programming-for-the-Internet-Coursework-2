@@ -19,6 +19,7 @@ if(Log.isLoggedIn()){
 <option value="http://localhost:8080/Coursework2/Pages/TrackSearch.jsp">Search Spotify for songs</option>
 <option value="http://localhost:8080/Coursework2/Pages/ArtistSearch.jsp">Search Spotify for artists</option>
 <option value="http://localhost:8080/Coursework2/Pages/AlbumSearch.jsp">Search Spotify for albums</option>
+<option value="http://localhost:8080/Coursework2/Pages/CreatePlaylist.jsp">Create a Playlist</option>
 </select>
 <br><br>
 </form>
@@ -35,11 +36,6 @@ out.println("Please log in or create an account<br />");%>
  function openPage(pageURL)
  {
  window.location.href = pageURL;
- }
- 
- function createdatabase(pageURL)
- {
-window.location.href = pageURL;
  }
  </script>
 
