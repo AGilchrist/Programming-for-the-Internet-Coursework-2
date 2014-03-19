@@ -105,15 +105,17 @@ public class CreatePlaylist {
 		BoundStatement boundStatement = new BoundStatement(statement);
 		ResultSet rs = session.execute(boundStatement);
 		for (Row row : rs) {
+			if(this.username.equals(row.getString("Username"))){
 				if(this.playlistname.equals(row.getString("PlaylistName"))){
 					playlistexists = true;
-		   		}
-		   }
-		   if(playlistexists != true){
-			   statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos) VALUES(?, ?, 1)");
-			   session.execute(statement.bind(this.username, this.playlistname));
-		   }
-		   session.close();
+				}
+			}
+		}
+		if(playlistexists != true){
+		   statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos) VALUES(?, ?, 1)");
+		   session.execute(statement.bind(this.username, this.playlistname));
+		}
+		session.close();
 	}
 	
 	public boolean getPlaylistExists()
