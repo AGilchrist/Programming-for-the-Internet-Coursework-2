@@ -2,15 +2,9 @@ package com.coursework2.alistair.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashMap;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -20,12 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.google.code.jspot.Results;
 import com.google.code.jspot.Spotify;
-import com.google.code.jspot.Track;
-import com.coursework2.alistair.Beans.*;
+import com.coursework2.alistair.Beans.Data;
 import com.coursework2.alistair.lib.*;
-import com.coursework2.alistair.models.*;
 
 
 /**
@@ -64,18 +55,17 @@ public void init(ServletConfig config) throws ServletException {
 }
     
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-PreparedStatement pstmt = null;
-//URL url = new URL ("https://ws.spotify.com/search/1/track?q=kaizers+orchestra");
-
+Data data = new Data();
 try {
 Convertors ut = new Convertors();
 String args[]=ut.SplitRequestPath(request);
 response.setContentType("text/html");
 PrintWriter out=null;
-out =	new PrintWriter(response.getOutputStream());
+//out =	new PrintWriter(response.getOutputStream());
+Spotify spotify = new Spotify();
 
 int command;
-String search;
+String searchTrack, searchArtist, searchAlbum;
 try{
 command =(Integer)CommandsMap.get(args[2]);
 }catch(Exception et){
@@ -83,46 +73,44 @@ error("Wrong Command",out);
 return;
 }
 try{
-	search = args[3];
+	searchTrack = data.getTrack();
+	searchArtist = data.getArtist();
+	searchAlbum = data.getAlbum();
 }catch(Exception et){
 error("Bad input",out);
 return;	
 }
 switch (command){
 case 1:	{
-	Spotify spotify = new Spotify();
-    Object results = spotify.searchTrack("track:"+search);
-    for (Track track : ((Results<Track>) results).getItems()) {
-         System.out.printf("Song Name = %s // Artist = %s // Album = %s\n",
-              track.getName(), track.getArtistName(), track.getAlbum().getName());
-    }
+	    Object results = spotify.searchTrack("track:"+searchTrack);
+	    request.setAttribute("Search", results); //Set a bean with the list in it
+	    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
+	    rd.forward(request, response);
+	    data.reset();
 	}
 break;
 case 2: {
-	Spotify spotify = new Spotify();
-    Object results = spotify.searchTrack("artist:"+search);
-    for (Track track : ((Results<Track>) results).getItems()) {
-         System.out.printf("Artist = %s // Album = %s // Song Name = %s\n",
-                track.getArtistName(), track.getAlbum().getName(), track.getName());
-       }
+	Object results = spotify.searchTrack("artist:"+searchArtist);
+	request.setAttribute("Search", results); //Set a bean with the list in it
+    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
+    rd.forward(request, response);
+    data.reset();
 	}
 break;
 case 3: {
-	Spotify spotify = new Spotify();
-    Object results = spotify.searchTrack("album:"+search);
-    for (Track track : ((Results<Track>) results).getItems()) {
-         System.out.printf("Album = %s // Artist = %s // Song Name = %s\n",
-                 track.getAlbum().getName(), track.getArtistName(), track.getName());
-       }
+    Object results = spotify.searchTrack("album:"+searchAlbum);
+    request.setAttribute("Search", results); //Set a bean with the list in it
+    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
+    rd.forward(request, response);
+    data.reset();
 	}
 break;
-default: error("No such search criteria",out);
+default: response.sendRedirect("http://localhost:8080/Coursework2/Pages/SearchResults.jsp");
 }
 }
 catch (Exception et) {
 return;
 }
-response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
 }
 
 private void error(String mess, PrintWriter out){
