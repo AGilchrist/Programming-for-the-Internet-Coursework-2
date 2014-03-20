@@ -14,7 +14,7 @@
 Name for Playlist:
 <input type="text" name="myPlaylistName" id="myPlaylistName" value="">
 <br><br>
-<input type="Submit" value="Update details for Servlet">
+<input type="Submit" value="Create Playlist!">
 <br><br>
 </form>
 

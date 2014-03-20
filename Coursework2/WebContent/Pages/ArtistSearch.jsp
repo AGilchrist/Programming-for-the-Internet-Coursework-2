@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
-<jsp:setProperty name="Log" property="*" /> 
+<jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Create a fault</title>
 </head>
@@ -25,9 +25,12 @@ Artist to search for
 
 <%  
 if(request.getParameter("myArtist") != null){
+	Data.setArtist(request.getParameter("myArtist"));
 	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Artist/" + request.getParameter("myArtist") + "\">Search</a>"); 
-}else{out.println("You must fill in a field to be able to search<br>");}
+	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Artist/" + request.getParameter("myArtist") + "/" + "\">Search</a>"); 
+	Data.reset();
+}
+else{out.println("You must provide an Artist Name to search by<br>");}
 %>   
 <br><br>
 <input type=button value="Back to Home Page" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')">

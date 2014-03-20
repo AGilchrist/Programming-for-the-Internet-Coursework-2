@@ -1,9 +1,7 @@
 package com.coursework2.alistair.Beans;
 
-import com.datastax.driver.core.utils.UUIDs;
-
 public class Data {
-	String searchTrack, searchArtist, searchAlbum;
+	private String searchTrack, searchArtist, searchAlbum;
 	String playlistName, trackID;
 	int PlaylistPos;
 	

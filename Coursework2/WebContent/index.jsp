@@ -20,6 +20,7 @@ if(Log.isLoggedIn()){
 <option value="http://localhost:8080/Coursework2/Pages/ArtistSearch.jsp">Search Spotify for artists</option>
 <option value="http://localhost:8080/Coursework2/Pages/AlbumSearch.jsp">Search Spotify for albums</option>
 <option value="http://localhost:8080/Coursework2/Pages/CreatePlaylist.jsp">Create a Playlist</option>
+<option value="http://localhost:8080/Coursework2/Pages/ViewPlaylist.jsp">View your Playlists</option>
 </select>
 <br><br>
 </form>

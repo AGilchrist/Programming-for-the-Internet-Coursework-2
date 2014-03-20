@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.code.jspot.Spotify;
+import com.coursework2.alistair.Beans.CreatePlaylist;
 import com.coursework2.alistair.lib.*;
 
 
@@ -22,26 +23,20 @@ import com.coursework2.alistair.lib.*;
 */
 @WebServlet(
 urlPatterns = {
-"/SpotifySearch/*"
+"/AddSong/*"
 },
 initParams = {
 @WebInitParam(name = "data-source", value = "jdbc/Faultdb")
 })
-public class SpotifySearch extends HttpServlet {
+public class AddSong extends HttpServlet {
 private static final long serialVersionUID = 1L;
 private HashMap CommandsMap = new HashMap();
 
 /**
 * @see HttpServlet#HttpServlet()
 */
-    public SpotifySearch() {
+    public AddSong() {
         super();
-        // TODO Auto-generated constructor stub
-   
-        // TODO Auto-generated constructor stub
-        CommandsMap.put("Track",1);
-        CommandsMap.put("Artist",2);
-        CommandsMap.put("Album",3);
 }
 
 /**
@@ -52,17 +47,16 @@ public void init(ServletConfig config) throws ServletException {
 }
     
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+CreatePlaylist play = new CreatePlaylist();
 try {
 Convertors ut = new Convertors();
 String args[]=ut.SplitRequestPath(request);
 response.setContentType("text/html");
 PrintWriter out=null;
-Spotify spotify = new Spotify();
 
-int command;
-String searchTrack, searchArtist, searchAlbum;
+String username, playlistname, id, track, artist, album;
+int playlistpos;
 try{
-command =(Integer)CommandsMap.get(args[2]);
 }catch(Exception et){
 error("Wrong Command",out);
 return;
@@ -72,37 +66,37 @@ try{
 error("Bad input",out);
 return;	
 }
-switch (command){
-case 1:	{
-		searchTrack = args[3];
-	    Object results = spotify.searchTrack("track:"+searchTrack);
-	    request.setAttribute("Search", results); //Set a bean with the list in it
-	    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
-	    rd.forward(request, response);
-	}
-break;
-case 2: {
-		searchArtist = args[3];
-		Object results = spotify.searchTrack("artist:"+searchArtist);
-		request.setAttribute("Search", results); //Set a bean with the list in it
-	    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
-	    rd.forward(request, response);
-	}
-break;
-case 3: {
-		searchAlbum = args[3];
-	    Object results = spotify.searchTrack("album:"+searchAlbum);
-	    request.setAttribute("Search", results); //Set a bean with the list in it
-	    RequestDispatcher rd = request.getRequestDispatcher("/Pages/SearchResults.jsp");
-	    rd.forward(request, response);
-	}
-break;
-default: response.sendRedirect("http://localhost:8080/Coursework2/Pages/SearchResults.jsp");
-}
+username = args[2];
+playlistname = args[3];
+playlistpos = Integer.parseInt(args[4]);
+id = args[5];
+track = args[6];
+artist = args[7];
+album = args[8];
+	
+System.out.println(username);
+System.out.println(playlistname);
+System.out.println(playlistpos);
+System.out.println(id);
+System.out.println(track);
+System.out.println(artist);
+System.out.println(album);
+
+play.setUsername(username);
+play.setPlaylistName(playlistname);
+play.setPlaylistPos(playlistpos);
+play.setSongID(id);
+play.setTitle(track);
+play.setArtist(artist);
+play.setAlbum(album);
+play.AddSong();
+
+
 }
 catch (Exception et) {
 return;
 }
+response.sendRedirect("http://localhost:8080/Coursework2/Pages/SearchResults.jsp");
 }
 
 private void error(String mess, PrintWriter out){

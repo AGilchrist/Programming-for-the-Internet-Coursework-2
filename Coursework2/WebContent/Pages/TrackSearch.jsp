@@ -19,14 +19,15 @@ if(Log.isLoggedIn()){
 Song Title to search for:
 <input type="text" name="myTrack" id="myTrack" value="">
 <br><br>
-<input type="button" value="Search!" name="Search!" onclick="openPage('http://localhost:8080/Coursework2/SpotifySearch/Track/')"/> 
+<input type="Submit" value="Update details for Servlet"> 
 <br><br>
 </form>
 <%  
 if(request.getParameter("myTrack") != null){
 	Data.setTrack(request.getParameter("myTrack"));
 	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Track/" + "\">Search</a>"); 
+	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Track/" + request.getParameter("myTrack") + "/" + "\">Search</a>"); 
+	Data.reset();
 }
 else{
 	out.println("Please Provide an Song Name to search for");

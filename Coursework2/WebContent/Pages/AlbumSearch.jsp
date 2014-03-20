@@ -4,6 +4,7 @@
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
+<jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <jsp:setProperty name="Log" property="*" /> 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Create a fault</title>
@@ -24,8 +25,10 @@ Album to search for
 </form>
 <%  
 if(request.getParameter("myAlbum") != null){
+	Data.setAlbum(request.getParameter("myAlbum"));
 	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Album/" + request.getParameter("myAlbum") + "\">Search</a>"); 
+	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Album/" + request.getParameter("myAlbum") + "/" + "\">Search</a>"); 
+	Data.reset();
 }
 else{out.println("You must fill in a field to be able to search<br>");}
 %>   

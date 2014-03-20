@@ -8,10 +8,13 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 public class CreatePlaylist {
-	String username, playlistname, playlistpos, title, artist, album, id;
+	String username, playlistname, title, artist, album, id;
 	boolean playlistexists;
 	Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 	PreparedStatement statement;
+	int playlistpos = 0;
+	ResultSet rs;
+	Object results;
 	
 	public CreatePlaylist(){
 		
@@ -37,12 +40,12 @@ public class CreatePlaylist {
 		return playlistname;
 	}
 	
-	public void setPlaylistPos(String pos)
+	public void setPlaylistPos(int pos)
 	{
 		playlistpos = pos;
 	}
 	
-	public String getPlatlistPos()
+	public int getPlatlistPos()
 	{
 		return playlistpos;
 	}
@@ -91,11 +94,16 @@ public class CreatePlaylist {
 	{
 		username = null;
 		playlistname = null;
-		playlistpos = null;
+		playlistpos = 0;
 		title = null;
 		artist = null;
 		album = null;
 		id = null;
+	}
+	
+	public void resetResults()
+	{
+		rs = null;
 	}
 	
 	public void CreatePlaylist()
@@ -103,7 +111,7 @@ public class CreatePlaylist {
 		Session session = cluster.connect("UserDetails");
 		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists");
 		BoundStatement boundStatement = new BoundStatement(statement);
-		ResultSet rs = session.execute(boundStatement);
+		rs = session.execute(boundStatement);
 		for (Row row : rs) {
 			if(this.username.equals(row.getString("Username"))){
 				if(this.playlistname.equals(row.getString("PlaylistName"))){
@@ -112,11 +120,67 @@ public class CreatePlaylist {
 			}
 		}
 		if(playlistexists != true){
-		   statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos) VALUES(?, ?, 1)");
-		   session.execute(statement.bind(this.username, this.playlistname));
+		   statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, 0, ?, ?, ?, ?)");
+		   session.execute(statement.bind(this.username, this.playlistname, "", "", "", ""));
 		}
 		session.close();
 	}
+	
+	public void AddSong()
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists");
+		BoundStatement boundStatement = new BoundStatement(statement);
+		rs = session.execute(boundStatement);
+		for (Row row : rs) {
+			if(this.username.equals(row.getString("Username"))){
+				if(this.playlistname.equals(row.getString("PlaylistName"))){
+					playlistexists = true;
+				}
+			}
+		}
+		if(playlistexists == true){
+			statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
+		   session.execute(statement.bind(this.username, this.playlistname, this.playlistpos, this.title, this.artist, this.album, this.id));
+		}
+		playlistexists = false;
+		session.close();
+	}
+	
+	public ResultSet getPlaylists()
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT PlaylistName FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistPos = 0");
+		ResultSet pl = session.execute(statement.bind(this.username));
+		session.close();
+		return pl;
+	}
+	
+	public int getSongCount()
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists");
+		BoundStatement boundStatement = new BoundStatement(statement);
+		rs = session.execute(boundStatement);
+		for (Row row : rs) {
+			if(this.username.equals(row.getString("Username"))){
+				if(this.playlistname.equals(row.getString("PlaylistName"))){
+					playlistexists = true;
+					playlistpos = 0;
+				}
+			}
+		}
+		if(playlistexists == true){
+			statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+			rs = session.execute(statement.bind(this.username, this.playlistname));
+			for (Row row : rs) {
+			playlistpos = row.getInt("PlaylistPos");
+			}
+		}
+		playlistexists = false;
+		session.close();
+		return playlistpos;
+}
 	
 	public boolean getPlaylistExists()
 	{
@@ -126,6 +190,16 @@ public class CreatePlaylist {
 	public void setPlaylistExists(boolean state)
 	{
 		playlistexists = state;
+	}
+	
+	public Object getResults()
+	{
+		return results;
+	}
+	
+	public void setResults(Object Results)
+	{
+		results = Results;
 	}
 			
 }
