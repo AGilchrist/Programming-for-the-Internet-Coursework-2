@@ -31,7 +31,7 @@ for (Row row : rs) {
 }
 %>
 </select>
-<br>
+<br><br>
 <input type="submit" value="Submit">
 <br><br>
 </form>
@@ -63,7 +63,7 @@ else {
 	if (results != null){
 	for (Track track : ((Results<Track>) results).getItems()) {
 	       out.println("Song Name = " + track.getName().replaceAll("/", "") + " // Artist = " + track.getArtistName() + " // Album = " + track.getAlbum().getName());
-	       out.println("<a href=\"http://localhost:8080/Coursework2/AddSong/" + Log.getUsername() + "/" + Playlist.getPlaylistName() + "/" + SongCount + "/" + track.getId() + "/" + track.getName().replaceAll("/", ",") + "/" + track.getArtistName() + "/" + track.getAlbum().getName() + "/" + "\">Search</a>"); 
+	       out.println("<a href=\"http://localhost:8080/Coursework2/AddSong/" + Log.getUsername() + "/" + Playlist.getPlaylistName() + "/" + SongCount + "/" + track.getId() + "/" + track.getName().replaceAll("\"", "") + "/" + track.getArtistName().replaceAll("\"", "") + "/" + track.getAlbum().getName().replaceAll("\"", "") + "/" + "\">Search</a>"); 
 	       %><br><%
 	       }
 	}

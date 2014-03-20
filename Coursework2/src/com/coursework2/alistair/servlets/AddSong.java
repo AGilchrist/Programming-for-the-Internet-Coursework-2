@@ -74,14 +74,6 @@ track = args[6];
 artist = args[7];
 album = args[8];
 	
-System.out.println(username);
-System.out.println(playlistname);
-System.out.println(playlistpos);
-System.out.println(id);
-System.out.println(track);
-System.out.println(artist);
-System.out.println(album);
-
 play.setUsername(username);
 play.setPlaylistName(playlistname);
 play.setPlaylistPos(playlistpos);

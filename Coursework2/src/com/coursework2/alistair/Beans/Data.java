@@ -2,8 +2,7 @@ package com.coursework2.alistair.Beans;
 
 public class Data {
 	private String searchTrack, searchArtist, searchAlbum;
-	String playlistName, trackID;
-	int PlaylistPos;
+	String playlistName = "", trackID;
 	
 	public Data(){
 		
@@ -57,16 +56,6 @@ public class Data {
 	public String getTrackID()
 	{
 		return trackID;
-	}
-	
-	public void setPlaylistPos(int i)
-	{
-		PlaylistPos = i;
-	}
-	
-	public int getPlaylistPos()
-	{
-		return PlaylistPos;
 	}
 	
 	public void reset()

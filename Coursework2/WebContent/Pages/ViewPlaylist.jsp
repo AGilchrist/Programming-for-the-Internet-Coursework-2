@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<form action="SearchResults.jsp">
+<form action="ViewPlaylist.jsp">
 <select name="Playlist">
 
 <%
@@ -25,10 +25,58 @@ for (Row row : rs) {
 }
 %>
 </select>
-<br>
-<input type="submit" value="Submit">
+<br><br>
+<input type="submit" value="View">
 <br><br>
 </form>
+
+<%
+if(request.getParameter("Playlist") == null){
+	out.println("You must select a playlist to view its contents");
+}else{
+	ResultSet pl = Playlist.getPlaylist(request.getParameter("Playlist"));
+	for (Row row : pl) {
+		%>
+		<table border="1">
+		<%
+			if(row.getInt("PlaylistPos") == 0){
+				%>
+					<tr>
+					<th>PlaylistPos</th>
+					<th>	Track Title</th>
+					<th>	Artist Name</th>
+					<th>	Album Name</th>
+					</tr>
+				<%
+			}
+			if(row.getInt("PlaylistPos") > 0){
+			%>
+			<tr>
+			<td><p><%=row.getInt("PlaylistPos")%></p></td>
+			<td><p><%=row.getString("TrackTitle")%></p></td>
+			<td><p><%=row.getString("Artist")%></p></td>
+			<td><p><%=row.getString("Album")%></p></td>
+			</tr>
+			<%
+		}
+		%>
+		</table>
+		<%
+	}
+}
+%>
+
+<br><br>
+<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
+<br><br>
+<input type="button" value="Log Out" name="Logout" onclick="openPage('http://localhost:8080/Coursework2/Pages/LogOut.jsp')"/>
+
+<script type="text/javascript">
+ function openPage(pageURL)
+ {
+ window.location.href = pageURL;
+ }
+ </script>
 
 </body>
 </html>

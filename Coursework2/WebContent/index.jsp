@@ -4,7 +4,6 @@
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
-<jsp:setProperty name="Log" property="*" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Home Page</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
@@ -16,11 +15,12 @@ if(Log.isLoggedIn()){
 <form action="#">
 <select name="URL" onchange="window.location.href= this.form.URL.options[this.form.URL.selectedIndex].value">
 <option> </option>
+<option value="http://localhost:8080/Coursework2/Pages/CreatePlaylist.jsp">Create a Playlist</option>
+<option value="http://localhost:8080/Coursework2/Pages/ViewPlaylist.jsp">View the contents of your Playlists</option>
+<option value="http://localhost:8080/Coursework2/Pages/DeletePlaylist.jsp">Delete a Playlist</option>
 <option value="http://localhost:8080/Coursework2/Pages/TrackSearch.jsp">Search Spotify for songs</option>
 <option value="http://localhost:8080/Coursework2/Pages/ArtistSearch.jsp">Search Spotify for artists</option>
 <option value="http://localhost:8080/Coursework2/Pages/AlbumSearch.jsp">Search Spotify for albums</option>
-<option value="http://localhost:8080/Coursework2/Pages/CreatePlaylist.jsp">Create a Playlist</option>
-<option value="http://localhost:8080/Coursework2/Pages/ViewPlaylist.jsp">View your Playlists</option>
 </select>
 <br><br>
 </form>

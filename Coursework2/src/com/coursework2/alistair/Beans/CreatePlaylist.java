@@ -151,9 +151,26 @@ public class CreatePlaylist {
 	{
 		Session session = cluster.connect("UserDetails");
 		statement = session.prepare("SELECT PlaylistName FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistPos = 0");
-		ResultSet pl = session.execute(statement.bind(this.username));
+		rs = session.execute(statement.bind(this.username));
+		session.close();
+		return rs;
+	}
+	
+	public ResultSet getPlaylist(String playlist)
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT PlaylistPos, TrackTitle, Artist, Album FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+		ResultSet pl = session.execute(statement.bind(this.username, playlist));
 		session.close();
 		return pl;
+	}
+	
+	public void deletePlaylist(String playlist)
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("DELETE FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+		session.execute(statement.bind(this.username, playlist));
+		session.close();
 	}
 	
 	public int getSongCount()
