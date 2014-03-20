@@ -18,6 +18,7 @@ if(Log.isLoggedIn()){
 <option value="http://localhost:8080/Coursework2/Pages/CreatePlaylist.jsp">Create a Playlist</option>
 <option value="http://localhost:8080/Coursework2/Pages/ViewPlaylist.jsp">View the contents of your Playlists</option>
 <option value="http://localhost:8080/Coursework2/Pages/DeletePlaylist.jsp">Delete a Playlist</option>
+<option value="http://localhost:8080/Coursework2/Pages/RearangePlaylist.jsp">Rearange the song order of a Playlist</option>
 <option value="http://localhost:8080/Coursework2/Pages/TrackSearch.jsp">Search Spotify for songs</option>
 <option value="http://localhost:8080/Coursework2/Pages/ArtistSearch.jsp">Search Spotify for artists</option>
 <option value="http://localhost:8080/Coursework2/Pages/AlbumSearch.jsp">Search Spotify for albums</option>

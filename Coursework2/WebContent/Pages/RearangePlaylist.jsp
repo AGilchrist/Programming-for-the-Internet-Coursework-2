@@ -8,11 +8,11 @@
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Playlist" class="com.coursework2.alistair.Beans.CreatePlaylist" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Rearange Playlist Order</title>
 </head>
 <body>
 
-<form action="DeletePlaylist.jsp">
+<form action="RearangePlaylist.jsp">
 <select name="Playlist">
 
 <%
@@ -26,17 +26,42 @@ for (Row row : rs) {
 %>
 </select>
 <br><br>
-<input type="submit" value="Delete">
+<input type="submit" value="Select Playlist">
 <br><br>
 </form>
 
 <%
 if(request.getParameter("Playlist") == null){
-	out.println("You must select a playlist to view its contents");
-}else{
-	Playlist.deletePlaylist(request.getParameter("Playlist"));
-	response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	out.println("You must select a playlist");
+}else if(request.getParameter("Song") == null){
+	Playlist.setPlaylistName(request.getParameter("Playlist"));
+	%>
+	<form action="RearangePlaylist.jsp">
+	<select name="Song">
+
+	<%
+	rs = Playlist.getSongs(request.getParameter("Playlist"));
+	for (Row row : rs) {
+		%>
+			<option value="<%=row.getString("TrackTitle")%>"><%=row.getString("TrackTitle")%></option>
+		<%
+	}
+	%>
+	</select>
+	<br><br>
+	Please provide a new position to place the song
+	<br>
+	<input type="text" name="myPlace" id="myPlace" value="">
+	<br><br>
+	<input type="submit" value="Rearange">
+	<br><br>
+	</form>
+	<%
 }
+if(request.getParameter("myPlace") != null){
+	Playlist.RearangePlaylist(Playlist.getPlaylistName(), request.getParameter("Song"), request.getParameter("myPlace"));
+	}
+
 %>
 
 <br><br>

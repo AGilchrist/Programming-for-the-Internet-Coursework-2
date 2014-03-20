@@ -23,6 +23,7 @@ session.execute("CREATE KEYSPACE IF NOT EXISTS UserDetails WITH replication "
 session.execute("CREATE TABLE IF NOT EXISTS UserDetails.Users (UserName text, Password text, PRIMARY KEY (UserName));");
 session.execute("CREATE TABLE IF NOT EXISTS UserDetails.UserPlaylists (Username text, PlaylistName text, PlaylistPos int, TrackTitle text, Artist text, Album text, Trackid text, PRIMARY KEY (Username, PlaylistName, PlaylistPos));");
 session.execute("CREATE INDEX PlaylistPos ON UserDetails.UserPlaylists (PlaylistPos);");
+session.execute("CREATE INDEX TrackTitle ON UserDetails.UserPlaylists (TrackTitle);");
 session.close();
 }
 }

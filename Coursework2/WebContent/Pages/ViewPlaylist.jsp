@@ -37,14 +37,14 @@ if(request.getParameter("Playlist") == null){
 	ResultSet pl = Playlist.getPlaylist(request.getParameter("Playlist"));
 	for (Row row : pl) {
 		%>
-		<table border="1">
+		<table border="1" width="80%">
 		<%
 			if(row.getInt("PlaylistPos") == 0){
 				%>
 					<tr>
 					<th>PlaylistPos</th>
-					<th>	Track Title</th>
-					<th>	Artist Name</th>
+					<th>Track Title</th>
+					<th>Artist Name</th>
 					<th>	Album Name</th>
 					</tr>
 				<%

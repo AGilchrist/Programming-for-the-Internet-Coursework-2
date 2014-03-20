@@ -173,6 +173,59 @@ public class CreatePlaylist {
 		session.close();
 	}
 	
+	public void RearangePlaylist(String playlist, String track, String place)
+	{
+		int oldposition = 0;
+		int Place = Integer.parseInt(place);
+		Session session = cluster.connect("UserDetails");
+		
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND PlaylistPos >= ?");
+		rs = session.execute(statement.bind(this.username, playlist, Place));
+		for (Row row : rs) {
+			statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			session.execute(statement.bind(this.username, playlist, Place+1, row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
+			Place ++;
+		}
+		
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND TrackTitle = ?");
+		ResultSet s = session.execute(statement.bind(this.username, playlist, track));
+		for (Row row : s) {
+			Place = Integer.parseInt(place);
+			oldposition = row.getInt("PlaylistPos");
+			statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			session.execute(statement.bind(this.username, playlist, Place, row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
+			statement = session.prepare("DELETE FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND PlaylistPos = ?");
+			session.execute(statement.bind(this.username, playlist, oldposition));
+		}
+		
+		int previouspos = 0, currentpos;
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+		rs = session.execute(statement.bind(this.username, playlist));
+		for (Row row : rs) {
+			if(row.getInt("PlaylistPos") > 0){
+				currentpos = row.getInt("PlaylistPos");
+				if(currentpos - previouspos != 1){
+					statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
+					session.execute(statement.bind(this.username, playlist, previouspos, row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
+					statement = session.prepare("DELETE FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND PlaylistPos = ?");
+					session.execute(statement.bind(this.username, playlist, currentpos));
+				}
+				previouspos = currentpos;
+			}
+		}
+		
+		session.close();
+	}
+	
+	public ResultSet getSongs(String playlist)
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT TrackTitle FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+		rs = session.execute(statement.bind(this.username, playlist));
+		session.close();
+		return rs;
+	}
+	
 	public int getSongCount()
 	{
 		Session session = cluster.connect("UserDetails");
