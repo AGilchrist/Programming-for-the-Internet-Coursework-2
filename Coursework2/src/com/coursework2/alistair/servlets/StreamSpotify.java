@@ -53,17 +53,17 @@ public void init(ServletConfig config) throws ServletException {
 }
     
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+CreatePlaylist Playlist = new CreatePlaylist();
 try {
 Convertors ut = new Convertors();
 String args[]=ut.SplitRequestPath(request);
 response.setContentType("text/html");
 PrintWriter out=null;
 Spotify spotify = new Spotify();
-CreatePlaylist Playlist = new CreatePlaylist();
 
 int command;
-String playlistname;
-ResultSet playlist;
+String username, playlistname, trackname;
+ResultSet playlist, song;
 
 int isStarted = -1;
 try{
@@ -77,19 +77,27 @@ try{
 error("Bad input",out);
 return;	
 }
-playlistname = args[3];
+username = args[3];
+playlistname = args[4];
 switch (command){
 case 1:	{
 	//Start streaming of playlist
-	playlist = Playlist.getFullPlaylist(playlistname);
-	for (Row row : playlist) {
+	playlist = Playlist.getFullPlaylist(username, playlistname);
+	/*for (Row row : playlist) {
 		
-	}
+	}*/
+	if(isStarted == -1){
 	response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	}
 	}
 break;
 case 2: {
-	//Start streaming a single track
+	//Start streaming of track
+	trackname = args[5];
+	song = Playlist.getSongInfo(username, playlistname, trackname);
+	if(isStarted == -1){
+		response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	}
 	}
 break;
 default: response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");

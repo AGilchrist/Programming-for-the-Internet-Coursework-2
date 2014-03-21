@@ -13,6 +13,7 @@
 <body>
 
 <%
+String playlist;
 if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
 <h3>Please select a playlist to stream and hit the button</h3>
@@ -32,18 +33,52 @@ if(rs != null){
 	%>
 	</select>
 	<br><br>
-	<input type="submit" value="Select">
+	<select name = "type">
+	<option> </option>
+	<option value = "Playlist">Playlist</option>
+	<option value = "Track">Track</option>
+	</select>
+	<br><br>
+	<input type="submit" value="Select Playlist">
 	<br><br>
 	</form>
 	
 	<%
-	if(request.getParameter("Playlist") == null){
-		out.println("You must select a playlist to be ablt to Stream it");
+	if(request.getParameter("Playlist") != null){
+		Playlist.setPlaylistName(request.getParameter("Playlist"));
+		if(request.getParameter("type").equals("Playlist")){
+			out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Playlist/" + Log.getUsername() + "/" + request.getParameter("Playlist") + "/" + "\">Stream Playlist</a>"); 
+		}
+		else if(request.getParameter("type").equals("Track")){
+			%>
+			<form action="Stream Playlist.jsp">
+			<select name="Song">
+
+			<%
+			rs = Playlist.getSongs(request.getParameter("Playlist"));
+			for (Row row : rs) {
+				%>
+					<option value="<%=row.getString("TrackTitle")%>"><%=row.getString("TrackTitle")%></option>
+				<%
+			}
+			%>
+			</select>
+			<br><br>
+			<input type="submit" value="Select Song">
+			<br><br>
+			</form>
+			<%
+		}
+		else{
+			System.out.println("Please indicate whether you would like to stream the playlist or the a single song");
+		}
 	}else{
-		String url = "http://localhost:8080/Coursework2/StreamSpotify/Playlist/" + request.getParameter("Playlist");
-		%>
-		<input type="button" value="Play" name="Play" onclick="openPage($url)"/>
-		<%
+		if(request.getParameter("Song") == null){
+			out.println("You must select a song to be ablt to Stream it");
+			}else{
+				playlist = Playlist.getPlaylistName();
+				out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Track/" + Log.getUsername() + "/" + playlist + "/" + request.getParameter("Song") + "/" + "\">Stream Song</a>"); 
+			}
 	}
 }else{
 	out.println("You must of created at least one playlist to be able to Stream it");

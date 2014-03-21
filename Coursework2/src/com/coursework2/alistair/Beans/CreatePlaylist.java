@@ -166,11 +166,20 @@ public class CreatePlaylist {
 		return pl;
 	}
 	
-	public ResultSet getFullPlaylist(String playlist)
+	public ResultSet getFullPlaylist(String Username, String playlist)
 	{
 		Session session = cluster.connect("UserDetails");
 		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
-		rs = session.execute(statement.bind(this.username, playlist));
+		rs = session.execute(statement.bind(Username, playlist));
+		session.close();
+		return rs;
+	}
+	
+	public ResultSet getSongInfo(String Username, String playlist, String track)
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND TrackTitle = ?");
+		rs = session.execute(statement.bind(Username, playlist, track));
 		session.close();
 		return rs;
 	}
