@@ -39,7 +39,7 @@ for (Row row : rs) {
 
 <%
 if(request.getParameter("Playlist") == null){
-	out.println("You must select a playlist");
+	out.println("You must select a playlist <br><br>");
 }else if(request.getParameter("Song") == null){
 	Playlist.setPlaylistName(request.getParameter("Playlist"));
 	%>

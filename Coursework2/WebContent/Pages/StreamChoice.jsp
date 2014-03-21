@@ -18,7 +18,7 @@ if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
 <h3>Please select a playlist to stream and hit the button</h3>
 
-<form action="Stream Playlist.jsp">
+<form action="StreamChoice.jsp">
 <select name="Playlist">
 
 <%
@@ -39,7 +39,7 @@ if(rs != null){
 	<option value = "Track">Track</option>
 	</select>
 	<br><br>
-	<input type="submit" value="Select Playlist">
+	<input type="submit" value="SelectChoice">
 	<br><br>
 	</form>
 	
@@ -51,7 +51,7 @@ if(rs != null){
 		}
 		else if(request.getParameter("type").equals("Track")){
 			%>
-			<form action="Stream Playlist.jsp">
+			<form action="StreamChoice.jsp">
 			<select name="Song">
 
 			<%
