@@ -40,11 +40,15 @@ else
 
 %>
 
+<br><br>
+<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
+
 <script type="text/javascript">
  function openPage(pageURL)
  {
  window.location.href = pageURL;
  }
+ </script>
  
 </script>
 </body>

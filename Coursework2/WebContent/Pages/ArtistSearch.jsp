@@ -6,29 +6,26 @@
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Create a fault</title>
+<title>Search Artists</title>
 </head>
 <body>
 <%
 if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
-<h3></h3>
+<h3>Please enter the name of an artist in the search box and hit search</h3>
 <p></p>
 
 <form name="SearchArtist" method="post" action="ArtistSearch.jsp">
 Artist to search for
 <input type="text" name="myArtist" id="myArtist" value="">
 <br><br>
-<input type="Submit" value="Update details for Servlet">
+<input type="Submit" value="Search!">
 <br><br>
 </form>
 
 <%  
 if(request.getParameter("myArtist") != null){
-	Data.setArtist(request.getParameter("myArtist"));
-	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Artist/" + request.getParameter("myArtist") + "/" + "\">Search</a>"); 
-	Data.reset();
+	response.sendRedirect("http://localhost:8080/Coursework2/SpotifySearch/Artist/"+ request.getParameter("myArtist"));
 }
 else{out.println("You must provide an Artist Name to search by<br>");}
 %>   

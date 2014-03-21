@@ -7,7 +7,7 @@
 <title>Create a User</title>
 </head>
 <body>
-<h1>Please enter a username and password</h1>
+<h1>Please enter a username and password then hit the button to create an account</h1>
 <form name="CreateUser" method="post" action="CreateUser.jsp">
 Username:
 <input type="text" name="myUsername" id="myUsername" value="">
@@ -36,11 +36,15 @@ if(request.getParameter("myUsername") != null){
 	}
 }
 %>
+<br><br>
+<input type="button" value="Home" name="Home" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')"/>
+
 <script type="text/javascript">
  function openPage(pageURL)
  {
  window.location.href = pageURL;
  }
+ </script>
  
 </script>
 </body>

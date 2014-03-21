@@ -12,12 +12,19 @@
 </head>
 <body>
 
+<%
+int place;
+if(Log.isLoggedIn()){
+    out.println("Hello user " + Log.getUsername() + " <br />");%>
+<h3>Please select a playlist and hit the button, then select a song in that playlist and enter a new position, must be a number</h3>
+
 <form action="RearangePlaylist.jsp">
 <select name="Playlist">
 
 <%
 Playlist.setUsername(Log.getUsername());
 ResultSet rs = Playlist.getPlaylists();
+if(rs != null){
 for (Row row : rs) {
 	%>
 		<option value="<%=row.getString("PlaylistName")%>"><%=row.getString("PlaylistName")%></option>
@@ -59,8 +66,23 @@ if(request.getParameter("Playlist") == null){
 	<%
 }
 if(request.getParameter("myPlace") != null){
-	Playlist.RearangePlaylist(Playlist.getPlaylistName(), request.getParameter("Song"), request.getParameter("myPlace"));
-	}
+	String Place = request.getParameter("myPlace");
+	 try {
+	        place = Integer.parseInt( Place );
+	      	Playlist.RearangePlaylist(Playlist.getPlaylistName(), request.getParameter("Song"), request.getParameter("myPlace"));
+	    }
+	    catch( Exception e ) {
+	        out.println("You must provide a valid number to be able to rearange the order of the playlist");
+	    }
+}
+}else{
+	out.println("You must of created at least one playlist to be able to use this feature");
+}
+}else{
+	%>
+	<h1>You must be logged into an account to access this feature</h1>
+	<%
+}
 
 %>
 

@@ -8,9 +8,14 @@
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Playlist" class="com.coursework2.alistair.Beans.CreatePlaylist" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Delete a Playlist</title>
 </head>
 <body>
+
+<%
+if(Log.isLoggedIn()){
+    out.println("Hello user " + Log.getUsername() + " <br />");%>
+<h3>Please select a playlist to delete and hit the button</h3>
 
 <form action="DeletePlaylist.jsp">
 <select name="Playlist">
@@ -18,24 +23,33 @@
 <%
 Playlist.setUsername(Log.getUsername());
 ResultSet rs = Playlist.getPlaylists();
-for (Row row : rs) {
+if(rs != null){
+	for (Row row : rs) {
+		%>
+			<option value="<%=row.getString("PlaylistName")%>"><%=row.getString("PlaylistName")%></option>
+		<%
+	}
 	%>
-		<option value="<%=row.getString("PlaylistName")%>"><%=row.getString("PlaylistName")%></option>
+	</select>
+	<br><br>
+	<input type="submit" value="Delete">
+	<br><br>
+	</form>
+	
 	<%
-}
-%>
-</select>
-<br><br>
-<input type="submit" value="Delete">
-<br><br>
-</form>
-
-<%
-if(request.getParameter("Playlist") == null){
-	out.println("You must select a playlist to view its contents");
+	if(request.getParameter("Playlist") == null){
+		out.println("You must select a playlist to be ablt to delete it");
+	}else{
+		Playlist.deletePlaylist(request.getParameter("Playlist"));
+		response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	}
 }else{
-	Playlist.deletePlaylist(request.getParameter("Playlist"));
-	response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
+	out.println("You must of created at least one playlist to be able to use this feature");
+}
+}else{
+	%>
+	<h1>You must be logged into an account to access this feature</h1>
+	<%
 }
 %>
 

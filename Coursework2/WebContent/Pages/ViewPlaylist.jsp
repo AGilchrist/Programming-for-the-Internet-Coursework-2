@@ -8,9 +8,14 @@
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Playlist" class="com.coursework2.alistair.Beans.CreatePlaylist" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>View Playlist Contents</title>
 </head>
 <body>
+
+<%
+if(Log.isLoggedIn()){
+    out.println("Hello user " + Log.getUsername() + " <br />");%>
+<h3>Please select a playlist and hit the button, then select a song in that playlist and enter a new position, must be a number</h3>
 
 <form action="ViewPlaylist.jsp">
 <select name="Playlist">
@@ -18,6 +23,7 @@
 <%
 Playlist.setUsername(Log.getUsername());
 ResultSet rs = Playlist.getPlaylists();
+if(rs != null){
 for (Row row : rs) {
 	%>
 		<option value="<%=row.getString("PlaylistName")%>"><%=row.getString("PlaylistName")%></option>
@@ -63,6 +69,14 @@ if(request.getParameter("Playlist") == null){
 		</table>
 		<%
 	}
+}
+}else{
+	out.println("You must of created at least one playlist to be able to use this feature");
+}
+}else{
+	%>
+	<h1>You must be logged into an account to access this feature</h1>
+	<%
 }
 %>
 

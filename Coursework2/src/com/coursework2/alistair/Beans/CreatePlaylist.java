@@ -6,6 +6,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.google.code.jspot.*;
 
 public class CreatePlaylist {
 	String username, playlistname, title, artist, album, id;
@@ -165,6 +166,15 @@ public class CreatePlaylist {
 		return pl;
 	}
 	
+	public ResultSet getFullPlaylist(String playlist)
+	{
+		Session session = cluster.connect("UserDetails");
+		statement = session.prepare("SELECT * FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ?");
+		rs = session.execute(statement.bind(this.username, playlist));
+		session.close();
+		return rs;
+	}
+	
 	public void deletePlaylist(String playlist)
 	{
 		Session session = cluster.connect("UserDetails");
@@ -195,7 +205,7 @@ public class CreatePlaylist {
 			statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
 			session.execute(statement.bind(this.username, playlist, Place, row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
 			statement = session.prepare("DELETE FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND PlaylistPos = ?");
-			session.execute(statement.bind(this.username, playlist, oldposition));
+			session.execute(statement.bind(this.username, playlist, row.getInt("PlaylistPos")));
 		}
 		
 		int previouspos = 0, currentpos;
@@ -204,13 +214,15 @@ public class CreatePlaylist {
 		for (Row row : rs) {
 			if(row.getInt("PlaylistPos") > 0){
 				currentpos = row.getInt("PlaylistPos");
-				if(currentpos - previouspos != 1){
+				if((currentpos - previouspos) != 1){
 					statement = session.prepare("INSERT INTO UserDetails.UserPlaylists (Username, PlaylistName, PlaylistPos, TrackTitle, Artist, Album, Trackid) VALUES(?, ?, ?, ?, ?, ?, ?)");
-					session.execute(statement.bind(this.username, playlist, previouspos, row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
+					session.execute(statement.bind(this.username, playlist, (previouspos+1), row.getString("TrackTitle"), row.getString("Artist"), row.getString("Album"), row.getString("Trackid")));
 					statement = session.prepare("DELETE FROM UserDetails.UserPlaylists WHERE Username = ? AND PlaylistName = ? AND PlaylistPos = ?");
 					session.execute(statement.bind(this.username, playlist, currentpos));
+					previouspos ++;
+				}else{
+				previouspos ++;
 				}
-				previouspos = currentpos;
 			}
 		}
 		

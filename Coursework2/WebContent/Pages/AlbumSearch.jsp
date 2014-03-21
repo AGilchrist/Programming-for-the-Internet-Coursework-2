@@ -7,30 +7,27 @@
 <jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <jsp:setProperty name="Log" property="*" /> 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Create a fault</title>
+<title>Search Albums</title>
 </head>
 <body>
 <%
 if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
-<h3></h3>
+<h3>Please enter the name of an album in the search box and hit search</h3>
 <p></p>
 
 <form name="SearchAlbum" method="post" action="AlbumSearch.jsp">
 Album to search for
 <input type="text" name="myAlbum" id="myAlbum" value="">
 <br><br>
-<input type="Submit" value="Update details for Servlet">
+<input type="Submit" value="Search">
 <br><br>
 </form>
 <%  
 if(request.getParameter("myAlbum") != null){
-	Data.setAlbum(request.getParameter("myAlbum"));
-	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Album/" + request.getParameter("myAlbum") + "/" + "\">Search</a>"); 
-	Data.reset();
+	response.sendRedirect("http://localhost:8080/Coursework2/SpotifySearch/Album/"+ request.getParameter("myAlbum"));
 }
-else{out.println("You must fill in a field to be able to search<br>");}
+else{out.println("You must provide an album name to search for<br>");}
 %>   
 <br><br>
 <input type=button value="Back to Home Page" onclick="openPage('http://localhost:8080/Coursework2/index.jsp')">

@@ -6,28 +6,25 @@
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Create a fault</title>
+<title>Search Songs</title>
 </head>
 <body>
 <%
 if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
-<h3></h3>
+<h3>Please enter a song name in the search box and hit search to see the best matching results</h3>
 <p></p>
 
 <form name="SearchTrack" method="post" action="TrackSearch.jsp">
 Song Title to search for:
 <input type="text" name="myTrack" id="myTrack" value="">
 <br><br>
-<input type="Submit" value="Update details for Servlet"> 
+<input type="Submit" value="Search!"> 
 <br><br>
 </form>
 <%  
 if(request.getParameter("myTrack") != null){
-	Data.setTrack(request.getParameter("myTrack"));
-	out.println("Please click the link below to begin searching <br>");
-	out.println("<a href=\"http://localhost:8080/Coursework2/SpotifySearch/Track/" + request.getParameter("myTrack") + "/" + "\">Search</a>"); 
-	Data.reset();
+	response.sendRedirect("http://localhost:8080/Coursework2/SpotifySearch/Track/"+ request.getParameter("myTrack"));
 }
 else{
 	out.println("Please Provide an Song Name to search for");

@@ -13,10 +13,14 @@
 <jsp:useBean id="Data" class="com.coursework2.alistair.Beans.Data" scope="session" />
 <jsp:useBean id="Playlist" class="com.coursework2.alistair.Beans.CreatePlaylist" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Search Results</title>
 </head>
 <body>
 
+<%
+if(Log.isLoggedIn()){
+    out.println("Hello user " + Log.getUsername() + " <br />");%>
+<h3>Please select a playlist and hit the button to be able to add these songs to it</h3>
 
 <form action="SearchResults.jsp">
 <select name="Playlist">
@@ -37,11 +41,12 @@ for (Row row : rs) {
 </form>
 
 <%
-Object results = request.getAttribute("Search");
+Object results = null;
 int SongCount;
 Playlist.setUsername(Log.getUsername());
 Playlist.setPlaylistName(request.getParameter("Playlist"));
 if(request.getParameter("Playlist") == null){
+	results = request.getAttribute("Search");
 	if(results == null){
 		results = Playlist.getResults();
 	}
@@ -63,10 +68,17 @@ else {
 	if (results != null){
 	for (Track track : ((Results<Track>) results).getItems()) {
 	       out.println("Song Name = " + track.getName().replaceAll("/", "") + " // Artist = " + track.getArtistName() + " // Album = " + track.getAlbum().getName());
-	       out.println("<a href=\"http://localhost:8080/Coursework2/AddSong/" + Log.getUsername() + "/" + Playlist.getPlaylistName() + "/" + SongCount + "/" + track.getId() + "/" + track.getName().replaceAll("\"", "") + "/" + track.getArtistName().replaceAll("\"", "") + "/" + track.getAlbum().getName().replaceAll("\"", "") + "/" + "\">Search</a>"); 
+	       out.println("<a href=\"http://localhost:8080/Coursework2/AddSong/" + Log.getUsername() + "/" + Playlist.getPlaylistName() + "/" + SongCount + "/" 
+	       				+ track.getId() + "/" + track.getName().replaceAll("\"", "") + "/" + track.getArtistName().replaceAll("\"", "")
+	       				+ "/" + track.getAlbum().getName().replaceAll("\"", "") + "/" + "\">Add Song</a>"); 
 	       %><br><%
 	       }
 	}
+}
+}else{
+	%>
+	<h1>You must be logged into an account to access the rest of these features</h1>
+	<%
 }
 %>
 <br>
