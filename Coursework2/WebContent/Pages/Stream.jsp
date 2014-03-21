@@ -22,6 +22,7 @@ if(Log.isLoggedIn()){
 Object playlistname, trackname;
 Session music = new Session();
 ResultSet rs;
+String Trackid;
 playlistname = request.getAttribute("PlaylistStream");
 trackname = request.getAttribute("TrackStream");
 if(playlistname != null)
@@ -38,6 +39,20 @@ if(playlistname != null)
 		System.out.println("Trackplaylist = " + playlistname);
 		System.out.println("Trackname = " + trackname);
 		rs = Playlist.getSongInfo(PlaylistName, TrackName);
+		for(Row row : rs){
+			Trackid = row.getString("Trackid");
+			System.out.println(Trackid);
+			%>
+			<Script Language="JavaScript">  
+   				function set(){  
+   					var trackid = Trackid;
+	   				var link = "https://embed.spotify.com/?uri=" + trackid;
+	   				document.getElementById("music").src=link;  
+				}  
+ 			</Script>  
+			<iframe src="https://embed.spotify.com/?uri=spotify:track:1gloYGAZI6eHp6MEPjLuL3" width="300" height="380" frameborder="0"></iframe>
+			<%
+		}
 	}
 }else{
 	out.println("No music streaming");
@@ -58,6 +73,11 @@ if(playlistname != null)
  function openPage(pageURL)
  {
  window.location.href = pageURL;
+ }
+ 
+ function set(Trackid)
+ {
+	 
  }
  </script>
 
