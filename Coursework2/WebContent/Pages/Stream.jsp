@@ -32,6 +32,15 @@ if(playlistname != null)
 	{
 		System.out.println("Playlist = " + playlistname);
 		rs = Playlist.getFullPlaylist(PlaylistName);
+		for (Row row : rs)
+		{
+			if(row.getInt("PlaylistPos")>0){
+				Trackid = row.getString("Trackid");
+				%>
+				<iframe src=<%="https://embed.spotify.com/?url=" + Trackid%> width="300" height="380" frameborder="0"></iframe>
+				<%
+			}
+		}
 	}
 	else
 	{
