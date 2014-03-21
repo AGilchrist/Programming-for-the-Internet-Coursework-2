@@ -47,7 +47,7 @@ if(rs != null){
 	if(request.getParameter("Playlist") != null){
 		Playlist.setPlaylistName(request.getParameter("Playlist"));
 		if(request.getParameter("type").equals("Playlist")){
-			out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Playlist/" + Log.getUsername() + "/" + request.getParameter("Playlist") + "/" + "\">Stream Playlist</a>"); 
+			out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Playlist/" + request.getParameter("Playlist") + "/" + "\">Stream Playlist</a>"); 
 		}
 		else if(request.getParameter("type").equals("Track")){
 			%>
@@ -77,7 +77,7 @@ if(rs != null){
 			out.println("You must select a song to be ablt to Stream it");
 			}else{
 				playlist = Playlist.getPlaylistName();
-				out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Track/" + Log.getUsername() + "/" + playlist + "/" + request.getParameter("Song") + "/" + "\">Stream Song</a>"); 
+				out.println("<a href=\"http://localhost:8080/Coursework2/StreamSpotify/Track/" + playlist + "/" + request.getParameter("Song") + "/" + "\">Stream Song</a>"); 
 			}
 	}
 }else{

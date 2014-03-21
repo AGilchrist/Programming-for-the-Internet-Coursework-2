@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -12,11 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.code.jspot.Spotify;
 import com.coursework2.alistair.Beans.CreatePlaylist;
 import com.coursework2.alistair.lib.*;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 
 
 /**
@@ -59,13 +57,10 @@ Convertors ut = new Convertors();
 String args[]=ut.SplitRequestPath(request);
 response.setContentType("text/html");
 PrintWriter out=null;
-Spotify spotify = new Spotify();
 
 int command;
-String username, playlistname, trackname;
-ResultSet playlist, song;
+String playlistname, trackname;
 
-int isStarted = -1;
 try{
 command =(Integer)CommandsMap.get(args[2]);
 }catch(Exception et){
@@ -77,27 +72,22 @@ try{
 error("Bad input",out);
 return;	
 }
-username = args[3];
-playlistname = args[4];
+playlistname = args[3];
 switch (command){
 case 1:	{
 	//Start streaming of playlist
-	playlist = Playlist.getFullPlaylist(username, playlistname);
-	/*for (Row row : playlist) {
-		
-	}*/
-	if(isStarted == -1){
-	response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
-	}
+	request.setAttribute("PlaylistStream", playlistname); //Set a bean with the list in it
+    RequestDispatcher rd = request.getRequestDispatcher("/Pages/Stream.jsp");
+    rd.forward(request, response);
 	}
 break;
 case 2: {
 	//Start streaming of track
-	trackname = args[5];
-	song = Playlist.getSongInfo(username, playlistname, trackname);
-	if(isStarted == -1){
-		response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");
-	}
+	trackname = args[4];
+	request.setAttribute("PlaylistStream", playlistname); //Set a bean with the list in it
+	request.setAttribute("TrackStream", trackname); //Set a bean with the list in it
+    RequestDispatcher rd = request.getRequestDispatcher("/Pages/Stream.jsp");
+    rd.forward(request, response);
 	}
 break;
 default: response.sendRedirect("http://localhost:8080/Coursework2/index.jsp");

@@ -2,13 +2,14 @@
     pageEncoding="ISO-8859-1"%>
     <%@ page import="com.datastax.driver.core.ResultSet" %>
 <%@ page import="com.datastax.driver.core.Row" %>
+<%@ page import="Spotify.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <jsp:useBean id="Log" class="com.coursework2.alistair.Beans.UserLogIn" scope="session" />
 <jsp:useBean id="Playlist" class="com.coursework2.alistair.Beans.CreatePlaylist" scope="session" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>View Playlist Contents</title>
+<title>Stream Music</title>
 </head>
 <body>
 
@@ -17,61 +18,29 @@ if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
 <h3>Please select a playlist and hit the button, then select a song in that playlist and enter a new position, must be a number</h3>
 
-<form action="ViewPlaylist.jsp">
-<select name="Playlist">
-
 <%
-Playlist.setUsername(Log.getUsername());
-ResultSet rs = Playlist.getPlaylists();
-if(rs != null){
-for (Row row : rs) {
-	%>
-		<option value="<%=row.getString("PlaylistName")%>"><%=row.getString("PlaylistName")%></option>
-	<%
-}
-%>
-</select>
-<br><br>
-<input type="submit" value="View">
-<br><br>
-</form>
-
-<%
-if(request.getParameter("Playlist") == null){
-	out.println("You must select a playlist to view its contents");
-}else{
-	ResultSet pl = Playlist.getPlaylist(request.getParameter("Playlist"));
-	for (Row row : pl) {
-		%>
-		<table border="1" width="80%">
-		<%
-			if(row.getInt("PlaylistPos") == 0){
-				%>
-					<tr>
-					<th>PlaylistPos</th>
-					<th>Track Title</th>
-					<th>Artist Name</th>
-					<th>Album Name</th>
-					</tr>
-				<%
-			}
-			if(row.getInt("PlaylistPos") > 0){
-			%>
-			<tr>
-			<td><p><%=row.getInt("PlaylistPos")%></p></td>
-			<td><p><%=row.getString("TrackTitle")%></p></td>
-			<td><p><%=row.getString("Artist")%></p></td>
-			<td><p><%=row.getString("Album")%></p></td>
-			</tr>
-			<%
-		}
-		%>
-		</table>
-		<%
+Object playlistname, trackname;
+Session music = new Session();
+ResultSet rs;
+playlistname = request.getAttribute("PlaylistStream");
+trackname = request.getAttribute("TrackStream");
+if(playlistname != null)
+{
+	String PlaylistName = String.valueOf(playlistname);
+	if(trackname == null)
+	{
+		System.out.println("Playlist = " + playlistname);
+		rs = Playlist.getFullPlaylist(PlaylistName);
 	}
-}
+	else
+	{
+		String TrackName = String.valueOf(trackname);
+		System.out.println("Trackplaylist = " + playlistname);
+		System.out.println("Trackname = " + trackname);
+		rs = Playlist.getSongInfo(PlaylistName, TrackName);
+	}
 }else{
-	out.println("You must of created at least one playlist to be able to use this feature");
+	out.println("No music streaming");
 }
 }else{
 	%>
