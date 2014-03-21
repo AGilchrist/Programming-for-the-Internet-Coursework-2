@@ -36,21 +36,11 @@ if(playlistname != null)
 	else
 	{
 		String TrackName = String.valueOf(trackname);
-		System.out.println("Trackplaylist = " + playlistname);
-		System.out.println("Trackname = " + trackname);
 		rs = Playlist.getSongInfo(PlaylistName, TrackName);
 		for(Row row : rs){
 			Trackid = row.getString("Trackid");
-			System.out.println(Trackid);
 			%>
-			<Script Language="JavaScript">  
-   				function set(){  
-   					var trackid = Trackid;
-	   				var link = "https://embed.spotify.com/?uri=" + trackid;
-	   				document.getElementById("music").src=link;  
-				}  
- 			</Script>  
-			<iframe src="https://embed.spotify.com/?uri=spotify:track:1gloYGAZI6eHp6MEPjLuL3" width="300" height="380" frameborder="0"></iframe>
+			<iframe src=<%="https://embed.spotify.com/?url=" + Trackid%> width="300" height="380" frameborder="0"></iframe>
 			<%
 		}
 	}
