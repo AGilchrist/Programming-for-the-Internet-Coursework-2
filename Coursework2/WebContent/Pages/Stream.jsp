@@ -16,7 +16,7 @@
 <%
 if(Log.isLoggedIn()){
     out.println("Hello user " + Log.getUsername() + " <br />");%>
-<h3>Please select a playlist and hit the button, then select a song in that playlist and enter a new position, must be a number</h3>
+<h3>Here are the links to the stream the songs from Spotify</h3>
 
 <%
 Object playlistname, trackname;
